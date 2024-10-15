@@ -20,14 +20,14 @@ func NewCache() *Cache {
 }
 
 
-// Fetch files from cache or origin server
+// fetch files from cache or origin server
 func (c *Cache) fetchFile(filename string, originServer string) (string, error) {
-	// Check if file is in cache
+	// check if file is in cache
 	filePath, found := c.files[filename]
 	if found {
-		// Verify if the cached file actually exists on the file system
+		// verify if the cached file actually exists on the file system
 		if _, err := os.Stat(filePath); err == nil {
-			// If the file exists, serve it from cache
+			// if the file exists, serve it from cache
 			log.Println("Serving from cache:", filename)
 			return filePath, nil
 		} else {
@@ -35,14 +35,14 @@ func (c *Cache) fetchFile(filename string, originServer string) (string, error) 
 		}
 	}
 
-	// If the file is not in cache or missing, fetch it from origin server
+	// if the file is not in cache or missing, fetch it from origin server
 	filePath = filepath.Join("./cache", filename)
 	err := c.downloadFromOrigin(filename, originServer, filePath)
 	if err != nil {
 		return "", err
 	}
 
-	// Save to cache
+	// save to cache
 	c.files[filename] = filePath
 	return filePath, nil
 }
