@@ -1,3 +1,3 @@
 module github.com/imaimen/cdn-go
 
-go 1.21.4
+go 1.23
