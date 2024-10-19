@@ -9,16 +9,15 @@ import (
 	"path/filepath"
 )
 
-// struct for caching
+// Cache struct for caching
 type Cache struct {
 	files map[string]string
 }
 
-// create a new Cache
+// NewCache create a new Cache
 func NewCache() *Cache {
 	return &Cache{files: make(map[string]string)}
 }
-
 
 // fetch files from cache or origin server
 func (c *Cache) fetchFile(filename string, originServer string) (string, error) {
@@ -46,7 +45,6 @@ func (c *Cache) fetchFile(filename string, originServer string) (string, error) 
 	c.files[filename] = filePath
 	return filePath, nil
 }
-
 
 func (c *Cache) downloadFromOrigin(filename, originServer, destination string) error {
 	url := fmt.Sprintf("http://%s/%s", originServer, filename)
@@ -76,7 +74,6 @@ func (c *Cache) downloadFromOrigin(filename, originServer, destination string) e
 	return nil
 }
 
-
 func main() {
 	cache := NewCache()
 	originServer := "localhost:8080"
@@ -100,7 +97,7 @@ func main() {
 			return
 		}
 
-		// server file 
+		// server file
 		http.ServeFile(w, r, filePath)
 	})
 
