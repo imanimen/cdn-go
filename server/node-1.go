@@ -58,12 +58,12 @@ func (c *Cache) downloadFromOrigin(filename, originServer, destination string) e
 	defer response.Body.Close()
 
 	// create destination file
-
 	output, err := os.Create(destination)
 	if err != nil {
 		return err
 	}
 
+	// close the file
 	defer output.Close()
 
 	// copy content from response to the file
