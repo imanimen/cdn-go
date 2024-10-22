@@ -45,4 +45,10 @@ func connect() {
 	fmt.Println("Successfully connected to redis")
 }
 
-func disconnect() {}
+func disconnect() {
+	if err := RedisClient.Close(); err != nil {
+		log.Fatalf("Error disconnecting from redis: %v", err)
+	} else {
+		fmt.Println("Successfully disconnected from redis")
+	}
+}
