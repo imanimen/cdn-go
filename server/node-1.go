@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/imaimen/cdn-go/utils"
 	"io"
 	"log"
 	"net/http"
@@ -85,6 +86,8 @@ func (c *Cache) downloadFromOrigin(filename, originServer, destination string) e
 }
 
 func main() {
+	// initialize redis in the node edge
+	utils.Connect()
 	cache := NewCache()
 	originServer := "localhost:8080"
 
@@ -117,6 +120,7 @@ func main() {
 	log.Println("Edge server running on :8081")
 	err := http.ListenAndServe(":8081", nil)
 	if err != nil {
+		utils.Disconnect()
 		log.Fatal(err)
 	}
 }

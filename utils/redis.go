@@ -24,7 +24,7 @@ func loadConfig() *Config {
 	}
 }
 
-func connect() {
+func Connect() {
 	config := loadConfig()
 
 	// create new redis connection
@@ -45,7 +45,7 @@ func connect() {
 	fmt.Println("Successfully connected to redis")
 }
 
-func disconnect() {
+func Disconnect() {
 	if err := RedisClient.Close(); err != nil {
 		log.Fatalf("Error disconnecting from redis: %v", err)
 	} else {
