@@ -53,7 +53,12 @@ func (c *Cache) downloadFromOrigin(filename, originServer, destination string) e
 		return err
 	}
 
-	defer response.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(response.Body)
 
 	// create destination file
 	output, err := os.Create(destination)
@@ -62,7 +67,12 @@ func (c *Cache) downloadFromOrigin(filename, originServer, destination string) e
 	}
 
 	// close the file
-	defer output.Close()
+	defer func(output *os.File) {
+		err := output.Close()
+		if err != nil {
+
+		}
+	}(output)
 
 	// copy content from response to the file
 	_, err = io.Copy(output, response.Body)
@@ -80,7 +90,10 @@ func main() {
 
 	// create cache directory
 	if _, err := os.Stat("./cache"); os.IsNotExist(err) {
-		os.Mkdir("./cache", 0755)
+		err := os.Mkdir("./cache", 0755)
+		if err != nil {
+			return
+		}
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
