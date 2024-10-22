@@ -1,8 +1,48 @@
 package utils
 
+import (
+	"context"
+	"fmt"
+	"github.com/go-redis/redis"
+	"log"
+	"time"
+)
 
-func loadConfig() {}
+var RedisClient *redis.Client
 
-func connect() {}
+type Config struct {
+	Addr     string
+	Password string
+	DB       int
+}
+
+func loadConfig() *Config {
+	return &Config{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	}
+}
+
+func connect() {
+	config := loadConfig()
+
+	// create new redis connection
+	RedisClient = redis.NewClient(&redis.Options{
+		Addr:     config.Addr,
+		Password: config.Password,
+		DB:       config.DB,
+	})
+
+	// test the connection
+	_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := RedisClient.Ping().Err(); err != nil {
+		log.Fatalf("Error connecting to redis: %v", err)
+	}
+
+	fmt.Println("Successfully connected to redis")
+}
 
 func disconnect() {}
